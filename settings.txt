@@ -1,0 +1,14 @@
+sql_ip:127.0.0.1
+sql_port:     3306
+sql_login: root      
+sql_password:      15320666a       
+ftp_ip: 127.0.0.1
+ftp_port: 21       
+ftp_login:Atracks                                       
+ftp_password:  15320666a 
+email_ip: 1
+email_port: 1
+email_login: 1
+email_password: 1
+my_login: pivo
+endof_settings
