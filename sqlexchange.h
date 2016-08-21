@@ -20,8 +20,8 @@ typedef QList<QVariant> SqlRecord;
  */
 class SqlExchange
 {
-  public: virtual void prepareQuery(const QString& queryText) = 0;
-  public: virtual void bindValue(const QString& placeholder, const QVariant& value) = 0;
+  public: virtual void getReadyFor(const QString& queryText) = 0;
+  public: virtual void loadPlaceholder(const QString& placeholder, const QVariant& value) = 0;
   public: virtual QList<SqlRecord> executeQuery() = 0;
   
   public: virtual void beginTransaction() = 0;

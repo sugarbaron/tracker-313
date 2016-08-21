@@ -7,6 +7,7 @@
 #define SQLEXCHANGEUNIT
 
 #include "sqlexchange.h"
+#include "sqlcorpuscle.h"
 #include <QScopedPointer>
 #include <QSqlQuery>
 
@@ -26,6 +27,8 @@ class SqlExchangeUnit : public SqlExchange
   private: QSqlDatabase _database;
   private: QSqlQuery    _query;
   private: quint32 _fieldsQuantity;
+  private: QString _queryText;
+  private: QList<SqlCorpuscle> _corpuscles;
   
   //секция_методов_____________________________________________________________
   /////////////////////////////////////////////////////////////////////////////
@@ -35,15 +38,16 @@ class SqlExchangeUnit : public SqlExchange
   private: void initDatabase(const QString& ip, const quint32 port, const QString& login, const QString& password);
   private: void connect();
   private: void initQuery();
-  public: virtual ~SqlExchangeUnit();
+  public:  virtual ~SqlExchangeUnit();
   
-  public:  void prepareQuery(const QString& queryText);
+  public:  void getReadyFor(const QString& queryText);
   
-  public:  void bindValue(const QString& placeholder, const QVariant& value);
+  public:  void loadPlaceholder(const QString& placeholder, const QVariant& value);
   
   public:  QList<SqlRecord> executeQuery();
-  private: QList<QVariant> executeQueryWithParry() const;
   private: void makeTriesOfQueryExecution();
+  private: void prepareQuery();
+  private: void bindValues();
   private: void handleNegativeTry();
   private: QList<SqlRecord> getQueryResult();
   private: void checkRecord() const;

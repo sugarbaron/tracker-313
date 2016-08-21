@@ -335,11 +335,14 @@ void FtpHardWorker::getEntryList(QString path)
   connect(this,SIGNAL(getListFinished()),&loop,SLOT(quit()));
   _ftp->list(path);
   loop.exec();
-  if(_ftp->error())
+  int errorCode = _ftp->error();
+  if(errorCode)
   {
-    QString msg = tr("Get folder list error")
+    qCritical()<<"for path #"<<path;
+    QString msg = tr("Get folder list error: ")
                 + _ftp->errorString();
     qCritical()<<msg;
+    qCritical("error code #%i", errorCode);
     throw FtpException(msg);
   }
   return;

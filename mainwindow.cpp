@@ -460,7 +460,7 @@ void MainWindow::refreshStatusTask()
     Task refreshedTask;
     refreshedTask.synhronizeWithDb(task->getIdTask());
     refreshedTask.setStatus(Task::inProgress);
-    sqlHardWorker->updateTask(refreshedTask, false);
+    sqlHardWorker->updateSqlTaskData(refreshedTask);
   }
   else
   {throw ExecutionAborted();}

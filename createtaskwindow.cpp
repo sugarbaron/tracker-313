@@ -34,10 +34,12 @@ void CreateTaskWindow::responsibleWasChanged(qint32 index)
   // если он был выбран как соисполнитель
   QListWidgetItem* wd;
   qint32 size = this->ui->selectedAccompliceLst->count();
+  quint32 responsibleId = this->ui->selectResponsibleCmBx->itemData(index,Qt::UserRole).value<quint32>();
+  quint32 currentAccompliceId;
   for(qint32 i = 0; i < size; ++i)
   {
-    if(this->ui->selectedAccompliceLst->item(i)->data(Qt::UserRole).value<Worker>()
-       == this->ui->selectResponsibleCmBx->itemData(index,Qt::UserRole).value<Worker>())
+    currentAccompliceId = this->ui->selectedAccompliceLst->item(i)->data(Qt::UserRole).value<quint32>();
+    if(currentAccompliceId == responsibleId)
     {
       wd = this->ui->selectedAccompliceLst->item(i);
       delete wd;

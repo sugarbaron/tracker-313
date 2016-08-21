@@ -193,10 +193,10 @@ void ReportTaskWindow::updateReportedTask(quint32 statusTask, Task& task)
     parentTask.setComment(comment);
   }
   SqlHardWorker* sqlHardWorker = General::getSqlHardWorker();
-  sqlHardWorker->updateTask(task,false);
+  sqlHardWorker->updateSqlTaskData(task);
   if(needReportToParentTask)
   {
-    sqlHardWorker->updateTask(parentTask,false);
+    sqlHardWorker->updateSqlTaskData(parentTask);
     // Отправим уведомление о создании отчета по поручению автору
     QString subjectMsg = "Получен отчет по поручению";
     QString textMsg = "Суть поручения: " + parentTask.getDescription();

@@ -53,11 +53,9 @@ class SqlHardWorker_Tester
   private: static void initDesigner();
   private: static void initProgrammer();
   private: static void initNigga();
+  private: static void setSlavesForMasters();
   
   private: static void test_getWorkerByLogin();
-  private: static void setIdsForAllWorkers();
-  private: static void setIdForWorker(Worker& worker);
-  private: static void setSlavesForMasters();
   private: static void test_getWorkerById();
   private: static void test_getWorkers();
   private: static void fillListWithAllWorkers(QList<Worker>& list);
@@ -95,30 +93,47 @@ class SqlHardWorker_Tester
   private: static void initRequestedByProgrammerTask();
   
   private: static void test_getTasksRequestedBy();
-  private: static void setIdsForAllTasks();
-  private: static void setIdForTask(Task& task);
-  private: static Task getTaskByAuthorIdAndDescription(const quint32 authorId, const QString& description);
   private: static void test_getAllWorkerTasks();
   private: static void test_getTasksForResponsible();
   private: static void test_getCompleteTasksForWorker();
   private: static void test_getTask();
+  private: static void test_sqlRollbackForAddTask();
+  private: static void provokeSqlRollbackForAddTask(Task& wrongTask);
+  private: static void test_ftpRollbackForAddTask();
+  private: static void provokeFtpRollbackForAddTask(Task& wrongTask);
+  private: static void checkRollbackForAddTask(const Task& wrongTask);
   
   private: static void fillDatabaseWithTestReports();
   private: static void initSimpleReport();
   private: static void initProgrammersReport();
   private: static void initNiggasReport();
   private: static void setReportsIdsForTasks();
-  private: static void setIdsForAllReports();
   
   private: static void test_getReports();
+  private: static void test_sqlRollbackForAddReport();
+  private: static void provokeSqlRollbackForAddReport(Report& wrongReport);
+  private: static void test_ftpRollbackForAddReport();
+  private: static void provokeFtpRollbackForAddReport(Report& wrongReport);
+  private: static void checkRollbackForAddReport(const Report& wrongReport);
   
   private: static void reinitRequestedByFatherSimpleTask();
   
   private: static void test_updateTask();
+  private: static void test_updateSqlTaskData();
+  private: static void test_sqlRollbackForUpdateTask();
+  private: static void provokeSqlRollbackForUpdateTask(Task& wrongTask);
+  private: static void test_ftpRollbackForUpdateTask();
+  private: static void provokeFtpRollbackForUpdateTask(Task& wrongTask);
+  private: static void test_rollbackForUpdateSqlTaskData();
+  private: static void provokeRollbackForUpdateSqlTaskData(Task& wrongTask);
+  private: static void checkRollbackForUpdateTask(const Task& wrongTask);
   
   private: static void reinitSimpleReport();
   
   private: static void test_updateReport();
+  private: static void test_ftpRollbackForUpdateReport();
+  private: static void provokeFtpRollbackForUpdateReport(Report& wrongReport);
+  private: static void checkRollbackForUpdateReport(const Report& wrongReport);
   
   private: template <typename T> class ListsComparator
   {

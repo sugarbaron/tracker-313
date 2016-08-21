@@ -105,10 +105,14 @@ class SqlHardWorker
    *  \param taskId - айди поручения по которому создан отчет */
   public: virtual void addReport(Report& report, const quint32 taskId) const = 0;
 
+  /*! \brief обновить поручение в базе (только в части данных sql-сервера, то есть без загрузки файлов на ftp-сервер)
+   *  \param updated обновлённое поручение */
+  public: virtual void updateSqlTaskData(const Task& updated) const = 0;
+  
   /*! \brief обновить задачу в базе
    *  \param updated - обновлённая задача
    *  \param needLoadFiles - костыль для опредления необходимости обновления файлов-вложений к поручению */
-  public: virtual void updateTask(const Task& updated, bool needLoadFiles) const = 0;
+  public: virtual void updateTask(const Task& updated) const = 0;
 
   /*! \brief обновить отчёт в базе
    *  \param updated - обновлённый отчёт */

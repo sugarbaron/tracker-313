@@ -81,25 +81,17 @@ void SqlExchangeUnit::initQuery()
 SqlExchangeUnit::~SqlExchangeUnit()
 {}
 
-void SqlExchangeUnit::prepareQuery(const QString& queryText)
+void SqlExchangeUnit::getReadyFor(const QString& queryText)
 {
+  _queryText = queryText;
   _fieldsQuantity = SqlQueryParser::calculateFields(queryText);
-  bool isOk = _query.prepare(queryText);
-  if( !isOk )
-  {
-    QString errorText = "_query.prepare() error";
-    QString diagnostics = _query.lastError().text();
-    qCritical()<<errorText;
-    qCritical()<<diagnostics;
-    
-    throw SqlQueryException(errorText);
-  }
   return;
 }
 
-void SqlExchangeUnit::bindValue(const QString& placeholder, const QVariant& value)
+void SqlExchangeUnit::loadPlaceholder(const QString& placeholder, const QVariant& value)
 {
-  _query.bindValue(placeholder, value);
+  SqlCorpuscle corpuscle(placeholder, value);
+  _corpuscles.append(corpuscle);
   return;
 }
 
@@ -115,9 +107,12 @@ void SqlExchangeUnit::makeTriesOfQueryExecution()
   bool isOk = false;
   for(quint32 i=0; i<TRIES_QUANTITY; i++)
   {
+    prepareQuery();
+    bindValues();
     isOk = _query.exec();
     if(isOk)
     {
+      _corpuscles.clear();
       return;
     }
     else
@@ -129,6 +124,33 @@ void SqlExchangeUnit::makeTriesOfQueryExecution()
   QString errorText = "sql query execution error";
   qCritical()<<errorText;
   throw SqlQueryException(errorText);
+}
+
+void SqlExchangeUnit::prepareQuery()
+{
+  bool isOk = _query.prepare(_queryText);
+  if( !isOk )
+  {
+    QString errorText = "_query.prepare() error";
+    QString diagnostics = _query.lastError().text();
+    qCritical()<<errorText;
+    qCritical()<<diagnostics;
+    throw SqlQueryException(errorText);
+  }
+  return;
+}
+
+void SqlExchangeUnit::bindValues()
+{
+  QString  placeholder;
+  QVariant valueToBind;
+  foreach(SqlCorpuscle corpuscle, _corpuscles)
+  {
+    placeholder = corpuscle.getPlaceholder();
+    valueToBind = corpuscle.getValueToBind();
+    _query.bindValue(placeholder, valueToBind);
+  }
+  return;
 }
 
 void SqlExchangeUnit::handleNegativeTry()
