@@ -34,10 +34,10 @@ void logMessageOutput(QtMsgType type, const QMessageLogContext &context, const Q
       /*logString += QString("%1 [%2] [info] %3").arg(dateTimeString).arg(context.function).arg(msg) + "\n";*/
       break;
     case QtWarningMsg:
-      logString += QString("[warn]  %1 [%2] %3").arg(dateTimeString).arg(context.function).arg(msg) + "\n";
+      logString += QString("[warn ] %1 [%2] %3").arg(dateTimeString).arg(context.function).arg(msg) + "\n";
       break;
     case QtCriticalMsg:
-      logString += QString("[err]   %1 [%2] %3").arg(dateTimeString).arg(context.function).arg(msg) + "\n";
+      logString += QString("[error] %1 [%2] %3").arg(dateTimeString).arg(context.function).arg(msg) + "\n";
       // Возводим флаг, что в протоколе есть ошибки
       wasErrors = true;
       break;

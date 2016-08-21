@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     sqlhardworker_tester.cpp \
     sqlexchangeunit.cpp \
     sqlqueryparser.cpp \
-    settingsunit.cpp
+    settingsunit.cpp \
+    sqlcorpuscle.cpp
 
 HEADERS  += mainwindow.h \
     sqlhardworker.h \
@@ -69,7 +70,6 @@ HEADERS  += mainwindow.h \
     clockunit.h \
     email.h \
     smtphardworker.h \
-    sqlhardworker_tests.h \
     sqlhardworkerunit.h \
     sqlhardworker_tester.h \
     sqlexchange.h \
@@ -78,7 +78,8 @@ HEADERS  += mainwindow.h \
     settings.h \
     settingsunit.h \
     sqlqueryparser.h \
-    sqldatabasecreator.h
+    sqldatabasecreator.h \
+    sqlcorpuscle.h
 
 FORMS    += mainwindow.ui \
     loginwindow.ui \

@@ -139,27 +139,27 @@ void SqlHardWorkerUnit::addTaskData(const Task& task) const
                  + "," + IS_OVERDUE_PLACEHOLDER
                  + "," + IMPORTANCE_PLACEHOLDER
                  + "," + PARENT_TASK_ID_PLACEHOLDER + ");";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   QString description = task.getDescription();
   quint32 responsibleId = task.getResponsibleId();
   quint32 status = task.getStatus();
   quint32 authorId = task.getAuthorId();
-  quint32 parentTaskId  = task.getParent();
+  quint32 parentTaskId = task.getParent();
   quint32 importance = task.getImportance();
   QDate creationDate = task.getCreationDate();
   QDate deadlineDate = task.getDeadlineDate();
   bool  isOverdue = task.getIsOverdue();
   
-  _exchangeUnit->bindValue(DESCRIPTION_PLACEHOLDER, description);
-  _exchangeUnit->bindValue(CREATION_DATE_PLACEHOLDER, creationDate);
-  _exchangeUnit->bindValue(DEADLINE_DATE_PLACEHOLDER, deadlineDate);
-  _exchangeUnit->bindValue(PARENT_TASK_ID_PLACEHOLDER, parentTaskId);
-  _exchangeUnit->bindValue(RESPONSIBLE_ID_PLACEHOLDER, responsibleId);
-  _exchangeUnit->bindValue(IMPORTANCE_PLACEHOLDER, importance);
-  _exchangeUnit->bindValue(IS_OVERDUE_PLACEHOLDER, isOverdue);
-  _exchangeUnit->bindValue(AUTHOR_ID_PLACEHOLDER, authorId);
-  _exchangeUnit->bindValue(STATUS_PLACEHOLDER, status);
+  _exchangeUnit->loadPlaceholder(DESCRIPTION_PLACEHOLDER, description);
+  _exchangeUnit->loadPlaceholder(CREATION_DATE_PLACEHOLDER, creationDate);
+  _exchangeUnit->loadPlaceholder(DEADLINE_DATE_PLACEHOLDER, deadlineDate);
+  _exchangeUnit->loadPlaceholder(PARENT_TASK_ID_PLACEHOLDER, parentTaskId);
+  _exchangeUnit->loadPlaceholder(RESPONSIBLE_ID_PLACEHOLDER, responsibleId);
+  _exchangeUnit->loadPlaceholder(IMPORTANCE_PLACEHOLDER, importance);
+  _exchangeUnit->loadPlaceholder(IS_OVERDUE_PLACEHOLDER, isOverdue);
+  _exchangeUnit->loadPlaceholder(AUTHOR_ID_PLACEHOLDER, authorId);
+  _exchangeUnit->loadPlaceholder(STATUS_PLACEHOLDER, status);
   
   _exchangeUnit->executeQuery();
   return;
@@ -176,7 +176,7 @@ QList<SqlRecord> SqlHardWorkerUnit::executeGetMaxTaskIdQuery() const
 {
   QString queryText = "SELECT MAX(idTasks) "
                       "FROM TrackerDB.Tasks;";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   return queryResult;
 }
@@ -258,7 +258,7 @@ void SqlHardWorkerUnit::addAccomplicesForTask(const quint32 taskId, const QList<
   }
   queryText += ";";
   
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -286,9 +286,9 @@ void SqlHardWorkerUnit::addCommentForTask(const quint32 taskId, const QString& c
                + COMMENT_PLACEHOLDER + ","
                + TASK_ID_PLACEHOLDER + ");";
   
-  _exchangeUnit->prepareQuery(queryText);
-  _exchangeUnit->bindValue(COMMENT_PLACEHOLDER, comment);
-  _exchangeUnit->bindValue(TASK_ID_PLACEHOLDER, taskId);
+  _exchangeUnit->getReadyFor(queryText);
+  _exchangeUnit->loadPlaceholder(COMMENT_PLACEHOLDER, comment);
+  _exchangeUnit->loadPlaceholder(TASK_ID_PLACEHOLDER, taskId);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -315,9 +315,9 @@ void SqlHardWorkerUnit::addWarningDateForTask(const quint32 taskId, const QDate&
                        + WARNING_DATE_PLACEHOLDER 
                  + "," + TASK_ID_PLACEHOLDER + ");";
   
-  _exchangeUnit->prepareQuery(queryText);
-  _exchangeUnit->bindValue(WARNING_DATE_PLACEHOLDER, warningDate);
-  _exchangeUnit->bindValue(TASK_ID_PLACEHOLDER, taskId);
+  _exchangeUnit->getReadyFor(queryText);
+  _exchangeUnit->loadPlaceholder(WARNING_DATE_PLACEHOLDER, warningDate);
+  _exchangeUnit->loadPlaceholder(TASK_ID_PLACEHOLDER, taskId);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -358,7 +358,7 @@ void SqlHardWorkerUnit::addOrdersForTask(const quint32 taskId, const QList<quint
   }
   queryText += ";";
   
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -400,7 +400,7 @@ void SqlHardWorkerUnit::addProjectsForTask(const quint32 taskId, const QList<qui
   }
   queryText += ";";
   
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -446,7 +446,7 @@ void SqlHardWorkerUnit::addFilesForTask(const quint32 taskId, const QStringList&
   }
   queryText += ";";
   
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   QString currentFile;
   for(quint32 index=0; index<filesQuantity; index++)
@@ -454,8 +454,8 @@ void SqlHardWorkerUnit::addFilesForTask(const quint32 taskId, const QStringList&
     currentFile = files.at(index);
     currentFilePlaceholder = filesPlaceholders.at(index);
     currentTaskPlaceholder = tasksPlaceholders.at(index);
-    _exchangeUnit->bindValue(currentFilePlaceholder, currentFile);
-    _exchangeUnit->bindValue(currentTaskPlaceholder, taskId);
+    _exchangeUnit->loadPlaceholder(currentFilePlaceholder, currentFile);
+    _exchangeUnit->loadPlaceholder(currentTaskPlaceholder, taskId);
   }
   
   _exchangeUnit->executeQuery();
@@ -483,9 +483,9 @@ void SqlHardWorkerUnit::addReportForTask(const quint32 taskId, const quint32 rep
                       "VALUES ("
                        + TASK_ID_PLACEHOLDER   
                  + "," + REPORT_ID_PLACEHOLDER + ");";
-  _exchangeUnit->prepareQuery(queryText);
-  _exchangeUnit->bindValue(TASK_ID_PLACEHOLDER, taskId);
-  _exchangeUnit->bindValue(REPORT_ID_PLACEHOLDER, reportId);
+  _exchangeUnit->getReadyFor(queryText);
+  _exchangeUnit->loadPlaceholder(TASK_ID_PLACEHOLDER, taskId);
+  _exchangeUnit->loadPlaceholder(REPORT_ID_PLACEHOLDER, reportId);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -588,13 +588,13 @@ void SqlHardWorkerUnit::addReportData(const Report& report) const
                       "VALUES ("
                        + TEXT_PLACEHOLDER
                  + "," + CREATION_DATE_PLACEHOLDER + ");";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   QString text = report.getText();
   QDate creationDate = report.getCreationDate();
   
-  _exchangeUnit->bindValue(TEXT_PLACEHOLDER, text);
-  _exchangeUnit->bindValue(CREATION_DATE_PLACEHOLDER, creationDate);
+  _exchangeUnit->loadPlaceholder(TEXT_PLACEHOLDER, text);
+  _exchangeUnit->loadPlaceholder(CREATION_DATE_PLACEHOLDER, creationDate);
   
   _exchangeUnit->executeQuery();
   return;
@@ -611,7 +611,7 @@ QList<SqlRecord> SqlHardWorkerUnit::executeGetMaxReportIdQuery() const
 {
   QString queryText = "SELECT MAX(idReport) "
                         "FROM TrackerDB.reports;";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   return queryResult;
 }
@@ -657,7 +657,7 @@ void SqlHardWorkerUnit::addFilesForReport(const quint32 reportId, const QStringL
   }
   queryText += ";";
   
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   QString currentFile;
   for(quint32 index=0; index<filesQuantity; index++)
@@ -665,8 +665,8 @@ void SqlHardWorkerUnit::addFilesForReport(const quint32 reportId, const QStringL
     currentFile = files.at(index);
     currentFilePlaceholder = filesPlaceholders.at(index);
     currentReportIdPlaceholder = reportsIdsPlaceholders.at(index);
-    _exchangeUnit->bindValue(currentFilePlaceholder, currentFile);
-    _exchangeUnit->bindValue(currentReportIdPlaceholder, reportId);
+    _exchangeUnit->loadPlaceholder(currentFilePlaceholder, currentFile);
+    _exchangeUnit->loadPlaceholder(currentReportIdPlaceholder, reportId);
   }
   
   _exchangeUnit->executeQuery();
@@ -1386,8 +1386,8 @@ Worker SqlHardWorkerUnit::getWorker(const QString& login) const
                         "isGod "
                       "FROM TrackerDB.workers "
                       "WHERE (login = " + placeholder + ");";
-  _exchangeUnit->prepareQuery(queryText);
-  _exchangeUnit->bindValue(placeholder, login);
+  _exchangeUnit->getReadyFor(queryText);
+  _exchangeUnit->loadPlaceholder(placeholder, login);
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   
   QList<Worker> workers = extractWorkersDataFromQueryResultAndRelatedTables(queryResult);
@@ -1990,7 +1990,7 @@ QStringList SqlHardWorkerUnit::getFilesForReport(const quint32 reportId) const
   return files;
 }
 
-void SqlHardWorkerUnit::updateTask(const Task& updated, const bool needLoadFiles) const
+void SqlHardWorkerUnit::updateSqlTaskData(const Task& updated) const
 {
   synchronizeDateTime();
   
@@ -2003,7 +2003,24 @@ void SqlHardWorkerUnit::updateTask(const Task& updated, const bool needLoadFiles
   
   _exchangeUnit->beginTransaction();
   tryToUpdateTaskDataOnSqlServer(updated);
-  tryToUpdateTaskDataOnFtpServer(updated, needLoadFiles);
+  _exchangeUnit->commitTransaction();
+  return;
+}
+
+void SqlHardWorkerUnit::updateTask(const Task& updated) const
+{
+  synchronizeDateTime();
+  
+  if( !(updated.isValid()) )
+  {
+    QString errorText = "invalid argument: #updated";
+    qCritical()<<errorText;
+    throw NeedFixCode(errorText);
+  }
+  
+  _exchangeUnit->beginTransaction();
+  tryToUpdateTaskDataOnSqlServer(updated);
+  tryToUpdateTaskDataOnFtpServer(updated);
   _exchangeUnit->commitTransaction();
   return;
 }
@@ -2049,7 +2066,7 @@ void SqlHardWorkerUnit::updateTaskData(const Task& updated) const
                         "importance = " + IMPORTANCE_PLACEHOLDER + ","
                         "parentTaskId = " + PARENT_TASK_ID_PLACEHOLDER + " "
                       "WHERE idTasks = "  + TASK_ID_PLACEHOLDER + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   quint32 taskId = updated.getIdTask();
   quint32 status = updated.getStatus();
@@ -2062,16 +2079,16 @@ void SqlHardWorkerUnit::updateTaskData(const Task& updated) const
   QDate deadlineDate = updated.getDeadlineDate();
   bool  isOverdue = updated.getIsOverdue();
   
-  _exchangeUnit->bindValue(TASK_ID_PLACEHOLDER, taskId);
-  _exchangeUnit->bindValue(STATUS_PLACEHOLDER, status);
-  _exchangeUnit->bindValue(AUTHOR_ID_PLACEHOLDER, authorId);
-  _exchangeUnit->bindValue(IS_OVERDUE_PLACEHOLDER, isOverdue);
-  _exchangeUnit->bindValue(IMPORTANCE_PLACEHOLDER, importance);
-  _exchangeUnit->bindValue(DESCRIPTION_PLACEHOLDER, description);
-  _exchangeUnit->bindValue(CREATION_DATE_PLACEHOLDER, creationDate);
-  _exchangeUnit->bindValue(DEADLINE_DATE_PLACEHOLDER, deadlineDate);
-  _exchangeUnit->bindValue(PARENT_TASK_ID_PLACEHOLDER, parentTaskId);
-  _exchangeUnit->bindValue(RESPONSIBLE_ID_PLACEHOLDER, responsibleId);
+  _exchangeUnit->loadPlaceholder(TASK_ID_PLACEHOLDER, taskId);
+  _exchangeUnit->loadPlaceholder(STATUS_PLACEHOLDER, status);
+  _exchangeUnit->loadPlaceholder(AUTHOR_ID_PLACEHOLDER, authorId);
+  _exchangeUnit->loadPlaceholder(IS_OVERDUE_PLACEHOLDER, isOverdue);
+  _exchangeUnit->loadPlaceholder(IMPORTANCE_PLACEHOLDER, importance);
+  _exchangeUnit->loadPlaceholder(DESCRIPTION_PLACEHOLDER, description);
+  _exchangeUnit->loadPlaceholder(CREATION_DATE_PLACEHOLDER, creationDate);
+  _exchangeUnit->loadPlaceholder(DEADLINE_DATE_PLACEHOLDER, deadlineDate);
+  _exchangeUnit->loadPlaceholder(PARENT_TASK_ID_PLACEHOLDER, parentTaskId);
+  _exchangeUnit->loadPlaceholder(RESPONSIBLE_ID_PLACEHOLDER, responsibleId);
   
   _exchangeUnit->executeQuery();
   return;
@@ -2096,7 +2113,7 @@ void SqlHardWorkerUnit::deleteAccomplicesForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.relationshipsTaskAccomplices "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2106,7 +2123,7 @@ void SqlHardWorkerUnit::deleteCommentForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.comments "
                       "WHERE idTasks = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2116,7 +2133,7 @@ void SqlHardWorkerUnit::deleteWarningDateForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.warningDates "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2126,7 +2143,7 @@ void SqlHardWorkerUnit::deleteOrdersForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.relationshipsTaskOrder "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2136,7 +2153,7 @@ void SqlHardWorkerUnit::deleteProjectsForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.relationshipsTaskProject "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2146,7 +2163,7 @@ void SqlHardWorkerUnit::deleteFilesForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.filesTasks "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2156,16 +2173,16 @@ void SqlHardWorkerUnit::deleteReportForTask(const quint32 taskId) const
   QString taskIdAsText = transformInText(taskId);
   QString queryText = "DELETE FROM TrackerDB.relationshipsTasksReports "
                       "WHERE idTask = " + taskIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
 
-void SqlHardWorkerUnit::tryToUpdateTaskDataOnFtpServer(const Task& updated, const bool needLoadFiles) const
+void SqlHardWorkerUnit::tryToUpdateTaskDataOnFtpServer(const Task& updated) const
 {
   try
   {
-    updateTaskFilesOnFtpServer(updated, needLoadFiles);
+    updateTaskFilesOnFtpServer(updated);
   }
   catch(...)
   {
@@ -2177,7 +2194,7 @@ void SqlHardWorkerUnit::tryToUpdateTaskDataOnFtpServer(const Task& updated, cons
   return;
 }
 
-void SqlHardWorkerUnit::updateTaskFilesOnFtpServer(const Task& task, const bool needLoadFiles) const
+void SqlHardWorkerUnit::updateTaskFilesOnFtpServer(const Task& task) const
 {
   quint32 taskId = task.getIdTask();
   QString taskIdAsText = transformInText(taskId);
@@ -2190,12 +2207,9 @@ void SqlHardWorkerUnit::updateTaskFilesOnFtpServer(const Task& task, const bool 
   {
     removeFolderFromFtpServer(pathInServer);
   }
-  if(needLoadFiles)
-  {
-    renameFolderOnFtpServer(pathInServer, renamedFolder);
-    uploadFilesToFtpServer(files, pathInServer);
-    removeFolderFromFtpServer(renamedFolder);
-  }
+  renameFolderOnFtpServer(pathInServer, renamedFolder);
+  uploadFilesToFtpServer(files, pathInServer);
+  removeFolderFromFtpServer(renamedFolder);
   return;
 }
 
@@ -2263,15 +2277,15 @@ void SqlHardWorkerUnit::updateReportData(const Report& report) const
                         "text = " + TEXT_PLACEHOLDER + ","
                         "creationDate = " + CREATION_DATE_PLACEHOLDER + " "
                       "WHERE idReport = " + REPORT_ID_PLACEHOLDER + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   
   quint32 reportId = report.getId();
   QString text = report.getText();
   QDate creationDate = report.getCreationDate();
   
-  _exchangeUnit->bindValue(TEXT_PLACEHOLDER, text);
-  _exchangeUnit->bindValue(CREATION_DATE_PLACEHOLDER, creationDate);
-  _exchangeUnit->bindValue(REPORT_ID_PLACEHOLDER, reportId);
+  _exchangeUnit->loadPlaceholder(TEXT_PLACEHOLDER, text);
+  _exchangeUnit->loadPlaceholder(CREATION_DATE_PLACEHOLDER, creationDate);
+  _exchangeUnit->loadPlaceholder(REPORT_ID_PLACEHOLDER, reportId);
   
   _exchangeUnit->executeQuery();
   return;
@@ -2282,7 +2296,7 @@ void SqlHardWorkerUnit::deleteFilesForReport(const quint32 reportId) const
   QString reportIdAsText = transformInText(reportId);
   QString queryText = "DELETE FROM TrackerDB.filesReports "
                       "WHERE idReport = " + reportIdAsText + ";";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2347,7 +2361,7 @@ void SqlHardWorkerUnit::synchronizeDateTime() const
 
 QList<SqlRecord> SqlHardWorkerUnit::executeGetServerDateTimeQuery() const
 {
-  _exchangeUnit->prepareQuery("SELECT SYSDATE();");
+  _exchangeUnit->getReadyFor("SELECT SYSDATE();");
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   return queryResult;
 }
@@ -2392,7 +2406,7 @@ QList<SqlRecord> SqlHardWorkerUnit::executeSelectQuery(const QString& selectQuer
     throw NeedFixCode(errorText);
   }
   
-  _exchangeUnit->prepareQuery(selectQuery);
+  _exchangeUnit->getReadyFor(selectQuery);
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   
   if( queryResult.isEmpty() )
@@ -2551,7 +2565,7 @@ void SqlHardWorkerUnit::addWorkerData(const Worker& worker) const
               + "','" + login
               + "','" + pass
               + "',"  + isGodAsText + ");";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2567,7 +2581,7 @@ QList<SqlRecord> SqlHardWorkerUnit::executeGetMaxWorkerIdQuery() const
 {
   QString queryText = "SELECT MAX(idWorker)"
                       "FROM TrackerDB.workers";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   QList<SqlRecord> queryResult = _exchangeUnit->executeQuery();
   return queryResult;
 }
@@ -2600,7 +2614,7 @@ void SqlHardWorkerUnit::addVice(const quint32 workerId, const quint32 viceId) co
                       "VALUES ("
                        + viceIdAsText
                  + "," + workerIdAsText + ");";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2622,7 +2636,7 @@ void SqlHardWorkerUnit::addSlave(const quint32 masterId, const quint32 slaveId) 
                       "VALUES ("
                        + masterIdAsText
                  + "," + slaveIdAsText + ");";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2639,7 +2653,7 @@ void SqlHardWorkerUnit::addOrder(const Order& order) const
   QString description = order.getName();
   QString queryText = "INSERT INTO TrackerDB.orders (description)"
                       "VALUES('" + description + "');";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
@@ -2656,14 +2670,14 @@ void SqlHardWorkerUnit::addProject(const Project& project) const
   QString description = project.getName();
   QString queryText = "INSERT INTO TrackerDB.projects (description)"
                       "VALUES('" + description + "');";
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }
 
 void SqlHardWorkerUnit::dropDatabase() const
 {
-  _exchangeUnit->prepareQuery("DROP DATABASE TrackerDB;");
+  _exchangeUnit->getReadyFor("DROP DATABASE TrackerDB;");
   _exchangeUnit->executeQuery();
   qDebug()<<"database dropped";
   return;
@@ -2671,7 +2685,7 @@ void SqlHardWorkerUnit::dropDatabase() const
 
 void SqlHardWorkerUnit::createDatabase() const
 {
-  _exchangeUnit->prepareQuery("CREATE SCHEMA IF NOT EXISTS TrackerDB DEFAULT CHARACTER SET cp1251;");
+  _exchangeUnit->getReadyFor("CREATE SCHEMA IF NOT EXISTS TrackerDB DEFAULT CHARACTER SET cp1251;");
   _exchangeUnit->executeQuery();
   qDebug()<<"database created. database is empty";
   return;
@@ -3256,7 +3270,7 @@ void SqlHardWorkerUnit::createChangedDataTable() const
 void SqlHardWorkerUnit::createDBTable(const QString& queryText) const
 {
   //[создаём таблицу]
-  _exchangeUnit->prepareQuery(queryText);
+  _exchangeUnit->getReadyFor(queryText);
   _exchangeUnit->executeQuery();
   return;
 }

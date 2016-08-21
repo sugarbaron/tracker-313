@@ -1348,7 +1348,7 @@ void GuiStateMachine::saveEditedTaskStateHnd()
     _createTaskWindow->fillEditedTask(editedTask);
     try
     {
-      _sqlHardWorker->updateTask(editedTask,true);
+      _sqlHardWorker->updateTask(editedTask);
     }
     catch(ExecutionAborted)// если заказчка файлов вложения поручения была отменена
     {
@@ -1394,6 +1394,12 @@ void GuiStateMachine::saveEditedTaskStateHnd()
         smtp->sendEmail(email);
       }
     }
+    emit(jumpToMainWindowInfoRefreshState());
+  }
+  catch(SmtpException& ex)
+  {
+    qCritical()<<ex.getInfo();
+    QMessageBox::critical(0, tr("ОШБИКА"),tr("Не удалось отправить уведомление по email"), QMessageBox::Ok);
     emit(jumpToMainWindowInfoRefreshState());
   }
   catch(SqlQueryException& ex)
@@ -1475,7 +1481,7 @@ void GuiStateMachine::cancelTaskStateHnd()
       // Меняем статус задачи на "Снято"
       task.setStatus(Task::canceled);
       // Обновляем задачу в БД
-      _sqlHardWorker->updateTask(task,false);
+      _sqlHardWorker->updateSqlTaskData(task);
     }
   }
   catch(SqlQueryException& ex)
@@ -1586,7 +1592,7 @@ void GuiStateMachine:: saveReportStateHnd()
     if(reportId == 0)
     {
       _sqlHardWorker->addReport(report, currentTaskId);
-      // Теперь у отчёта появился айди
+      // Теперь у отчёта появился айди (айди присваивает addReport() )
       reportId = report.getId();
       // Учтём это в объекте поручения
       task.setReportId(reportId);
@@ -1617,7 +1623,7 @@ void GuiStateMachine:: saveReportStateHnd()
       comment += _reportTaskWindow->ui->reportTxtEd->toPlainText();
       task.setComment(comment);
       // Обновляем поручение в БД
-      _sqlHardWorker->updateTask(task,false);
+      _sqlHardWorker->updateSqlTaskData(task);
     }
     catch(ExecutionAborted)
     {// если поручение не найдено в БД, то беда, ломаемся
@@ -1800,8 +1806,8 @@ void GuiStateMachine::exitStateHnd()
 
   // Закрываем соединение с FTP сервером
   FtpHardWorker* ftp = General::getFtpHardWorker();
-  ftp->disconnect();
   ftp->removeTmpFolder();
+  ftp->disconnect();
 
   // Закрываем соединение с БД
   _sqlHardWorker->disconnect();

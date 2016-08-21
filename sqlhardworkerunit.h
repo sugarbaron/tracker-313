@@ -268,11 +268,15 @@ public SqlHardWorker
   private: void fillReportWithFiles(Report& report) const;
   private: QStringList getFilesForReport(const quint32 reportId) const;
   
+  /*! \brief обновить поручение в базе (только в части данных sql-сервера, то есть без загрузки файлов на ftp-сервер)
+   *  \param updated обновлённое поручение */
+  public: void updateSqlTaskData(const Task& updated) const;
+  
   /*! \brief обновить поручение в базе
-   *  \param updated       обновлённое поручение
+   *  \param updated обновлённое поручение
    *  \param needLoadFiles костыль для опредления необходимости
    *                       обновления файлов-вложений к поручению */
-  public:  void updateTask(const Task& updated, const bool needLoadFiles) const;
+  public:  void updateTask(const Task& updated) const;
   
   private: void tryToUpdateTaskDataOnSqlServer(const Task& updated) const;
   private: void updateTaskData(const Task& updated) const;
@@ -284,8 +288,8 @@ public SqlHardWorker
   private: void deleteProjectsForTask(const quint32 taskId) const;
   private: void deleteFilesForTask(const quint32 taskId) const;
   private: void deleteReportForTask(const quint32 taskId) const;
-  private: void tryToUpdateTaskDataOnFtpServer(const Task& updated, const bool needLoadFiles) const;
-  private: void updateTaskFilesOnFtpServer(const Task& task, const bool needLoadFiles) const;
+  private: void tryToUpdateTaskDataOnFtpServer(const Task& updated) const;
+  private: void updateTaskFilesOnFtpServer(const Task& task) const;
   private: void removeFtpFilesAfterUpdatingTask(const Task& task) const;
   
   /*! \brief обновить отчёт в базе
