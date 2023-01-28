@@ -1,4 +1,4 @@
 # Tracker313
-buisness task tracking application. it helps to manage tasks, received by employees
+task tracker for team management
 
 developed with qt creator
